@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulasi SHB Sosiologi</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          animation: {
+            'fade-in-up': 'fadeInUp 0.5s ease-out',
+          },
+          keyframes: {
+            fadeInUp: {
+              '0%': { opacity: '0', transform: 'translateY(20px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen">
+
+  <!-- ================= SCREEN: START ================= -->
+  <div id="screen-start" class="min-h-screen flex flex-col items-center justify-center p-6">
+    <div class="max-w-3xl w-full bg-slate-800 p-8 md:p-12 rounded-2xl shadow-2xl text-center border border-slate-700 relative overflow-hidden">
+      <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500"></div>
+      
+      <div class="mb-6 flex justify-center">
+         <svg class="w-20 h-20 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+      </div>
+      
+      <h1 class="text-3xl md:text-5xl font-extrabold mb-4 tracking-tight text-white">
+        Latihan Soal Sosiologi
+      </h1>
+      <h2 class="text-lg md:text-xl text-indigo-300 font-semibold mb-6">
+        Materi: Lembaga Sosial & Keteraturan Sosial
+      </h2>
+      
+      <div class="bg-slate-700/50 rounded-xl p-6 mb-8 text-left max-w-xl mx-auto border border-slate-600">
+        <h3 class="font-bold text-white mb-3">📋 Instruksi Latihan:</h3>
+        <ul class="list-disc pl-5 space-y-2 text-slate-300">
+          <li>Terdiri dari <strong>50 Soal Pilihan Ganda</strong>.</li>
+          <li>Baca stimulus kasus dengan saksama sebelum menjawab.</li>
+          <li>Terdapat pembahasan otomatis setelah kamu memilih jawaban.</li>
+          <li>Kerjakan hingga akhir untuk melihat skor total belajarmu.</li>
+        </ul>
+      </div>
+
+      <button onclick="startQuiz()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 px-10 rounded-full text-lg shadow-lg shadow-indigo-500/30 transition transform hover:-translate-y-1">
+        Mulai Latihan Sekarang
+      </button>
+    </div>
+  </div>
+
+  <!-- ================= SCREEN: QUIZ ================= -->
+  <div id="screen-quiz" class="hidden min-h-screen py-8 px-4">
+    <div class="max-w-4xl mx-auto">
+      
+      <!-- Header & Progress -->
+      <div class="mb-6 flex items-center justify-between">
+        <div>
+          <span id="quiz-category" class="text-xs font-bold uppercase tracking-wider text-indigo-400 bg-indigo-900/30 px-3 py-1 rounded-full">
+            Kategori
+          </span>
+        </div>
+        <div id="quiz-progress-text" class="text-sm font-semibold text-slate-400">
+          Soal 1 / 50
+        </div>
+      </div>
+      <div class="w-full bg-slate-800 rounded-full h-2 mb-8 overflow-hidden">
+        <div id="quiz-progress-bar" class="bg-gradient-to-r from-blue-500 to-indigo-500 h-2 rounded-full transition-all duration-300 ease-out" style="width: 0%"></div>
+      </div>
+
+      <!-- Main Card -->
+      <div class="bg-slate-800 border border-slate-700 rounded-2xl shadow-xl overflow-hidden mb-6">
+        
+        <!-- Stimulus Box (Hidden if empty) -->
+        <div id="quiz-stimulus-container" class="bg-slate-700/30 p-5 md:p-8 border-b border-slate-700 text-slate-300 hidden">
+          <div class="flex gap-3 mb-3 items-center">
+            <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+            <h3 class="font-semibold text-white">Kasus / Stimulus</h3>
+          </div>
+          <p id="quiz-stimulus" class="whitespace-pre-wrap leading-relaxed text-sm md:text-base"></p>
+        </div>
+
+        <!-- Question Box -->
+        <div class="p-5 md:p-8">
+          <h2 id="quiz-question" class="text-xl md:text-2xl font-semibold mb-6 leading-snug text-white">
+            Pertanyaan
+          </h2>
+
+          <!-- Options -->
+          <div id="quiz-options" class="space-y-3">
+            <!-- Options will be injected here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Feedback & Next Button -->
+      <div id="quiz-feedback-container" class="hidden animate-fade-in-up">
+        <div id="quiz-feedback-box" class="p-6 rounded-2xl border mb-6">
+          <div class="flex items-center gap-3 mb-2">
+            <div id="quiz-feedback-icon"></div>
+            <h3 id="quiz-feedback-title" class="font-bold text-lg"></h3>
+          </div>
+          <div class="pl-10">
+            <p id="quiz-feedback-text" class="opacity-90 leading-relaxed text-sm md:text-base"></p>
+          </div>
+        </div>
+
+        <div class="flex justify-end pb-12">
+          <button onclick="handleNextQuestion()" id="quiz-next-btn" class="bg-blue-600 hover:bg-blue-500 text-white px-8 py-3 rounded-full font-bold shadow-lg flex items-center gap-2 transition">
+            Soal Berikutnya
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= SCREEN: RESULT ================= -->
+  <div id="screen-result" class="hidden min-h-screen flex flex-col items-center justify-center p-6">
+    <div class="max-w-2xl w-full bg-slate-800 p-8 md:p-12 rounded-3xl shadow-2xl text-center border border-slate-700">
+      
+      <h2 class="text-3xl font-bold mb-8 text-white">Latihan Selesai! 🎉</h2>
+      
+      <div class="relative w-48 h-48 mx-auto mb-8">
+        <svg class="w-full h-full" viewBox="0 0 36 36">
+          <path class="text-slate-700" stroke-width="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+          <path id="result-circle" class="text-indigo-500" stroke-dasharray="0, 100" stroke-width="3" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+        </svg>
+        <div class="absolute inset-0 flex flex-col items-center justify-center">
+          <span id="result-score" class="text-5xl font-black text-white">0</span>
+          <span class="text-sm text-slate-400 mt-1">dari 100</span>
+        </div>
+      </div>
+
+      <div class="bg-slate-700/30 rounded-xl p-6 mb-8 border border-slate-600">
+        <p class="text-lg">
+          Kamu menjawab benar <strong id="result-correct" class="text-emerald-400 text-xl">0</strong> dari <strong id="result-total" class="text-blue-400 text-xl">50</strong> soal.
+        </p>
+        <p id="result-message" class="mt-3 text-slate-400 italic">
+          Message
+        </p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <button onclick="startQuiz()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-8 rounded-full shadow-lg transition">
+          Ulangi Latihan 🔄
+        </button>
+        <button onclick="goHome()" class="bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 px-8 rounded-full transition">
+          Kembali ke Beranda 🏠
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- DATA SOAL SOSIOLOGI (50 SOAL) ---
+    const questionsData = [
+      {
+        id: 1,
+        category: "Lembaga Sosial",
+        stimulus: "Di sebuah desa pesisir, para nelayan memiliki kebiasaan menyisihkan sebagian tangkapan untuk janda-janda tua di desa. Kebiasaan ini tidak pernah ditulis atau diwajibkan oleh kepala desa, namun telah berjalan lintas generasi. Puluhan tahun kemudian, pemerintah daerah melihat potensi ini dan secara resmi membentuk \"Koperasi Nelayan Sejahtera\" dengan AD/ART tertulis yang mewajibkan iuran sosial.",
+        question: "Secara sosiologis, institusi di desa tersebut mengalami transisi klasifikasi dari...",
+        options: [
+          { key: "A", text: "General institution menjadi restricted institution." },
+          { key: "B", text: "Basic institution menjadi subsidiary institution." },
+          { key: "C", text: "Crescive institution menjadi enacted institution." },
+          { key: "D", text: "Regulative institution menjadi operative institution." },
+          { key: "E", text: "Unsanctioned institution menjadi approved institution." }
+        ],
+        correct: "C",
+        explanation: "Fase pertama merupakan kebiasaan yang tidak ditulis dan tumbuh alami tanpa rencana matang (crescive institution). Fase kedua, pemerintah meresmikan, membuat aturan tertulis, dan membentuk koperasi secara sengaja (enacted institution)."
+      },
+      {
+        id: 2,
+        category: "Lembaga Sosial",
+        stimulus: "Ketika krisis ekonomi yang sangat parah melanda sebuah negara, pemerintah dan masyarakat sepakat untuk menutup sementara seluruh lembaga pariwisata, klub hiburan malam, dan taman rekreasi. Seluruh dana dan perhatian masyarakat dialihkan secara masif untuk mempertahankan berjalannya rumah sakit dan keluarga.",
+        question: "Keputusan kolektif ini membuktikan adanya perbedaan derajat kepentingan antara...",
+        options: [
+          { key: "A", text: "General institution dan restricted institution." },
+          { key: "B", text: "Basic institution dan subsidiary institution." },
+          { key: "C", text: "Operative institution dan regulative institution." },
+          { key: "D", text: "Enacted institution dan crescive institution." },
+          { key: "E", text: "Approved institution dan unsanctioned institution." }
+        ],
+        correct: "B",
+        explanation: "Institusi kesehatan dan keluarga dipertahankan karena merupakan kebutuhan dasar yang esensial (basic institution). Sebaliknya, hiburan ditutup karena hanya dianggap sebagai pelengkap atau nilai tambah yang bisa ditunda (subsidiary institution)."
+      },
+      {
+        id: 3,
+        category: "Lembaga Sosial",
+        stimulus: "Sebuah sindikat rentenir ilegal beroperasi secara terstruktur dengan hierarki pimpinan dan sistem pembukuan rapi. Namun, cara menagih utang mereka sering menggunakan kekerasan fisik, sehingga warga desa akhirnya bersatu dan mengusir mereka.",
+        question: "Berdasarkan tingkat penerimaan masyarakat, sindikat ini diklasifikasikan sebagai...",
+        options: [
+          { key: "A", text: "Enacted institution." },
+          { key: "B", text: "Operative institution." },
+          { key: "C", text: "Restricted institution." },
+          { key: "D", text: "Unsanctioned institution." },
+          { key: "E", text: "Subsidiary institution." }
+        ],
+        correct: "D",
+        explanation: "Pertanyaan spesifik meminta klasifikasi \"berdasarkan tingkat penerimaan\". Karena sindikat tersebut meresahkan dan diusir warga, maka ia masuk kategori yang ditolak masyarakat (unsanctioned institution)."
+      },
+      {
+        id: 4,
+        category: "Lembaga Sosial",
+        stimulus: "Konsep tentang ritual keagamaan dan tempat ibadah dapat ditemukan di hampir seluruh peradaban manusia. Namun, aturan tata tertib ibadah di Pura secara khusus diatur oleh Parisada Hindu Dharma Indonesia (PHDI).",
+        question: "Berdasarkan penyebarannya, eksistensi agama secara universal dibandingkan dengan eksistensi lembaga PHDI merupakan perbandingan antara...",
+        options: [
+          { key: "A", text: "General institution dan restricted institution." },
+          { key: "B", text: "Basic institution dan subsidiary institution." },
+          { key: "C", text: "Approved institution dan unsanctioned institution." },
+          { key: "D", text: "Crescive institution dan enacted institution." },
+          { key: "E", text: "Regulative institution dan operative institution." }
+        ],
+        correct: "A",
+        explanation: "Agama universal adalah lembaga yang dikenal luas seluruh lapisan dunia (general institution), sementara PHDI adalah lembaga yang aturannya terbatas dianut oleh kelompok penganut Hindu saja (restricted institution)."
+      },
+      {
+        id: 5,
+        category: "Lembaga Sosial",
+        stimulus: "Sebuah perusahaan aplikasi e-commerce raksasa berhasil menghubungkan jutaan petani sayur dengan konsumen perkotaan. Bersamaan dengan itu, Komisi Pengawas Persaingan Usaha (KPPU) memantau ketat perusahaan tersebut agar tidak memonopoli harga.",
+        question: "Berdasarkan fungsinya, e-commerce dan KPPU secara berturut-turut tergolong sebagai...",
+        options: [
+          { key: "A", text: "Enacted institution dan Crescive institution." },
+          { key: "B", text: "Basic institution dan Subsidiary institution." },
+          { key: "C", text: "General institution dan Restricted institution." },
+          { key: "D", text: "Approved institution dan Unsanctioned institution." },
+          { key: "E", text: "Operative institution dan Regulative institution." }
+        ],
+        correct: "E",
+        explanation: "Perusahaan e-commerce berfungsi menghimpun cara-cara mencapai tujuan pemenuhan ekonomi (operative). KPPU berfungsi mengawasi pelaksanaan nilai/norma persaingan bisnis (regulative)."
+      },
+      {
+        id: 6,
+        category: "Karakteristik Lembaga",
+        stimulus: "Norma adat Suku Baduy yang melarang penggunaan teknologi modern ditaati warga tanpa perlu ancaman hukuman penjara, karena aturan itu lahir dari pengalaman hidup panjang dan diwariskan begitu saja.",
+        question: "Karakteristik norma adat tersebut paling akurat mendeskripsikan sifat dari...",
+        options: [
+          { key: "A", text: "Enacted institution." },
+          { key: "B", text: "Crescive institution." },
+          { key: "C", text: "Regulative institution." },
+          { key: "D", text: "Unsanctioned institution." },
+          { key: "E", text: "Operative institution." }
+        ],
+        correct: "B",
+        explanation: "Aturan yang tumbuh dari kebiasaan alamiah lintas generasi tanpa pembentukan birokrasi yang sengaja adalah hakikat dari crescive institution."
+      },
+      {
+        id: 7,
+        category: "Lembaga Sosial",
+        stimulus: "Dalam dunia kejahatan siber, sekelompok peretas memiliki institusi dark web untuk mencuri data. Interpol internasional akhirnya turun tangan untuk memburu dan menangkap jaringan tersebut.",
+        question: "Interaksi sosiologis yang terjadi antara sindikat peretas dan institusi Interpol adalah benturan antara...",
+        options: [
+          { key: "A", text: "Operative institution melawan Regulative institution." },
+          { key: "B", text: "Unsanctioned institution melawan Regulative institution." },
+          { key: "C", text: "Restricted institution melawan General institution." },
+          { key: "D", text: "Subsidiary institution melawan Basic institution." },
+          { key: "E", text: "Crescive institution melawan Enacted institution." }
+        ],
+        correct: "B",
+        explanation: "Sindikat peretas ditolak masyarakat karena mengganggu keamanan (unsanctioned), sedangkan Interpol bertugas mengawasi dan menegakkan norma hukum (regulative)."
+      },
+      {
+        id: 8,
+        category: "Klasifikasi Lembaga",
+        stimulus: "Melalui proses legislasi, DPR membentuk PT PLN yang bertugas secara spesifik memproduksi dan mendistribusikan energi untuk rakyat.",
+        question: "Jika dibedah berdasarkan \"perkembangannya\" dan \"fungsinya\", maka lembaga ini masuk dalam kategori...",
+        options: [
+          { key: "A", text: "Crescive institution dan Regulative institution." },
+          { key: "B", text: "Enacted institution dan Operative institution." },
+          { key: "C", text: "Basic institution dan General institution." },
+          { key: "D", text: "Restricted institution dan Subsidiary institution." },
+          { key: "E", text: "Approved institution dan Unsanctioned institution." }
+        ],
+        correct: "B",
+        explanation: "Sengaja dibentuk melalui undang-undang berarti enacted. Berfungsi menghimpun tata cara mendistribusikan kebutuhan pokok (listrik) berarti operative."
+      },
+      {
+        id: 9,
+        category: "Lembaga Keluarga",
+        stimulus: "Walaupun negara memiliki lembaga formal kepengasuhan anak, keluarga tidak akan pernah bisa dihapuskan dari struktur masyarakat manapun karena fungsi afeksi dan sosialisasinya mustahil dikerjakan birokrasi.",
+        question: "Fakta ini meneguhkan posisi keluarga sebagai...",
+        options: [
+          { key: "A", text: "General institution." },
+          { key: "B", text: "Approved institution." },
+          { key: "C", text: "Basic institution." },
+          { key: "D", text: "Operative institution." },
+          { key: "E", text: "Regulative institution." }
+        ],
+        correct: "C",
+        explanation: "Lembaga yang dianggap amat penting karena memiliki nilai mendasar yang tak bisa digantikan pranata lain adalah basic institution."
+      },
+      {
+        id: 10,
+        category: "Lembaga Agama",
+        stimulus: "Majelis Tinggi Agama Khonghucu Indonesia (MATAKIN) memiliki kalender peribadatan yang mengikat eksklusif umat Khonghucu. Meskipun tidak berlaku bagi umat lain, masyarakat umum sangat menghormati eksistensinya.",
+        question: "Hal ini membuktikan bahwa MATAKIN yang bersifat Restricted Institution juga sekaligus bersifat...",
+        options: [
+          { key: "A", text: "Approved Institution." },
+          { key: "B", text: "Enacted Institution." },
+          { key: "C", text: "Subsidiary Institution." },
+          { key: "D", text: "Regulative Institution." },
+          { key: "E", text: "Crescive Institution." }
+        ],
+        correct: "A",
+        explanation: "Walau ajarannya terbatas (restricted), eksistensi organisasinya diterima dan dihormati harmoni sosialnya oleh seluruh masyarakat (approved/sanctioned institution)."
+      },
+      {
+        id: 11,
+        category: "Teori Lembaga",
+        stimulus: "Joseph S. Roucek dan Roland R. Warren memandang lembaga sosial bukan sekadar gedung fisik, melainkan pola yang disetujui untuk memenuhi konsep kesejahteraan masyarakat.",
+        question: "Berdasarkan pandangan ini, esensi dari lembaga sosial terletak pada...",
+        options: [
+          { key: "A", text: "Adanya sanksi pidana yang sangat tegas bagi para pelanggar norma adat." },
+          { key: "B", text: "Proses interaksi sosial terstruktur yang disetujui untuk memenuhi kebutuhan." },
+          { key: "C", text: "Munculnya kompetisi antarkelompok untuk merebut kesejahteraan finansial." },
+          { key: "D", text: "Himpunan perlengkapan kebudayaan yang bersifat kekal dan stagnan statis." },
+          { key: "E", text: "Jaringan birokrasi yang memisahkan antara pihak penguasa dengan warga sipil." }
+        ],
+        correct: "B",
+        explanation: "Roucek & Warren menekankan pada \"pola-pola yang mempunyai kedudukan tetap... dari kebiasaan dengan persetujuan cara yang tidak dimungkiri guna kesejahteraan\". Hal ini paling cocok dengan opsi B (interaksi terstruktur yang disetujui untuk memenuhi kebutuhan)."
+      },
+      {
+        id: 12,
+        category: "Karakteristik Lembaga",
+        stimulus: "Setiap instansi pendidikan dasar selalu memasang lambang \"Tut Wuri Handayani\".",
+        question: "Dalam sosiologi, keberadaan lambang tersebut berfungsi untuk merepresentasikan salah satu karakteristik lembaga sosial, yakni...",
+        options: [
+          { key: "A", text: "Memiliki daya tahan yang diwariskan dari satu generasi ke generasi berikutnya." },
+          { key: "B", text: "Menjadi alat kelengkapan fisik yang dipergunakan untuk mencapai tujuan negara." },
+          { key: "C", text: "Menunjukkan adanya ideologi atau sistem gagasan yang dijunjung tinggi anggotanya." },
+          { key: "D", text: "Memiliki simbol sebagai suatu ciri khas yang membedakannya dengan lembaga lain." },
+          { key: "E", text: "Menandakan lahirnya sebuah tatanan aturan tertulis yang mengatur siswa di kelas." }
+        ],
+        correct: "D",
+        explanation: "Lambang/logo dalam sebuah instansi secara harfiah merupakan implementasi dari karakteristik lembaga sosial yang ke-1: \"Memiliki simbol sebagai ciri khas\"."
+      },
+      {
+        id: 13,
+        category: "Karakteristik Lembaga",
+        stimulus: "Sebuah panti asuhan yang didirikan sejak zaman kemerdekaan tetap beroperasi hingga kini, meskipun seluruh pendiri awalnya telah wafat.",
+        question: "Karakteristik lembaga sosial yang tecermin dari fenomena ini adalah...",
+        options: [
+          { key: "A", text: "Memiliki daya tahan dan usianya lebih lama dari usia anggota pendirinya." },
+          { key: "B", text: "Mempunyai alat perlengkapan yang selalu diperbarui seiring berjalannya zaman." },
+          { key: "C", text: "Menjadi lembaga pendidikan primer bagi anak-anak terlantar di masyarakat." },
+          { key: "D", text: "Memiliki sistem gagasan atau ideologi yang tidak pernah berubah bentuknya." },
+          { key: "E", text: "Memiliki tradisi tidak tertulis yang mengatur jadwal rutinitas anak panti." }
+        ],
+        correct: "A",
+        explanation: "Kelangsungan hidup institusi melampaui usia biologis pendiri/anggotanya adalah karakteristik \"usianya lebih lama dari usia anggota\" atau memiliki daya tahan pewarisan."
+      },
+      {
+        id: 14,
+        category: "Karakteristik Lembaga",
+        stimulus: "Di ruang sidang pengadilan, palu hakim dan buku undang-undang selalu tersedia. Sementara itu, nilai-nilai keadilan sosial selalu didengungkan sebagai prinsip utama.",
+        question: "Palu hakim dan nilai keadilan tersebut secara sosiologis mewakili karakteristik lembaga sosial berupa...",
+        options: [
+          { key: "A", text: "Simbol fisik dan tata tertib formal tertulis." },
+          { key: "B", text: "Usia yang lama dan daya tahan warisan sosial." },
+          { key: "C", text: "Alat kelengkapan nyata dan ideologi/sistem gagasan." },
+          { key: "D", text: "Tradisi turun-temurun dan norma pengendalian sosial." },
+          { key: "E", text: "Pola keteraturan sosial dan tahapan ajeg kelembagaan." }
+        ],
+        correct: "C",
+        explanation: "Palu dan buku adalah sarana/peralatan (\"Alat kelengkapan\" untuk mewujudkan visi), sedangkan prinsip keadilan sosial adalah \"Ideologi/Sistem Gagasan\"."
+      },
+      {
+        id: 15,
+        category: "Tujuan Lembaga",
+        stimulus: "Masyarakat meyakini bahwa larangan mudik saat pandemi COVID-19 lalu dibuat bukan untuk membatasi kebebasan, melainkan agar penularan tidak meluas.",
+        question: "Berdasarkan teori tujuan terbentuknya lembaga sosial, peraturan larangan tersebut mengemban tujuan pokok untuk...",
+        options: [
+          { key: "A", text: "Mengatur kebutuhan manusia agar terpenuhi secara memadai dari sektor ekonomi." },
+          { key: "B", text: "Memaksa masyarakat patuh pada sanksi aparat negara agar terbiasa disiplin." },
+          { key: "C", text: "Mengatur kehidupan warga berjalan tertib dan lancar sesuai kaidah demi keselamatan." },
+          { key: "D", text: "Memberikan pedoman bagi manusia dalam berhubungan intim dengan penciptanya." },
+          { key: "E", text: "Membentuk kepribadian yang tangguh agar masyarakat tidak mudah putus asa." }
+        ],
+        correct: "C",
+        explanation: "Larangan tersebut ditujukan untuk ketertiban, keselamatan umum, dan kelancaran hidup bermasyarakat, yang sesuai dengan tujuan kedua lembaga sosial: mengatur kehidupan sosial warga berjalan tertib."
+      },
+      {
+        id: 16,
+        category: "Fungsi Lembaga",
+        stimulus: "Terjadinya pergeseran demografi menyebabkan sempitnya lahan pekerjaan. Untuk menghindari konflik horisontal antarpencari kerja, pemerintah merumuskan aturan ketenagakerjaan yang adil.",
+        question: "Fungsi lembaga sosial (pemerintah) dalam hal ini difokuskan untuk...",
+        options: [
+          { key: "A", text: "Memberikan pedoman tata cara pencarian kerja yang menguntungkan penguasa." },
+          { key: "B", text: "Menjaga keutuhan masyarakat dari ancaman disintegrasi akibat persaingan." },
+          { key: "C", text: "Mendidik warga negara untuk selalu berhemat dalam menggunakan hasil bumi." },
+          { key: "D", text: "Memberikan pegangan dalam mengadakan sistem hierarki kelas yang baru." },
+          { key: "E", text: "Mempersiapkan generasi muda menghadapi kerasnya sistem ekonomi global." }
+        ],
+        correct: "B",
+        explanation: "Aturan dibuat untuk menghindari perebutan dan konflik sosial yang bisa memecah belah. Ini merupakan manifestasi dari fungsi \"Menjaga keutuhan masyarakat\" dari ancaman perpecahan."
+      },
+      {
+        id: 17,
+        category: "Fungsi Lembaga",
+        stimulus: "Ketika seorang siswa ketahuan mencontek, sekolah langsung memberikan sanksi poin pelanggaran sesuai buku tata tertib.",
+        question: "Keberadaan sanksi yang melekat pada norma ini membuktikan fungsi lembaga sosial sebagai...",
+        options: [
+          { key: "A", text: "Fasilitator yang memenuhi seluruh kebutuhan biologis pelajar di sekolah dasar." },
+          { key: "B", text: "Alat penekan yang membatasi ideologi individu agar tunduk pada paham negara." },
+          { key: "C", text: "Sarana yang memberikan pedoman mutlak dalam hubungan keluarga di asrama." },
+          { key: "D", text: "Pegangan dalam mengadakan sistem pengendalian sosial agar warga tak menyimpang." },
+          { key: "E", text: "Saluran pewarisan kebudayaan nenek moyang kepada generasi penerus yang cerdas." }
+        ],
+        correct: "D",
+        explanation: "Sanksi atas pelanggaran adalah inti dari \"sistem pengendalian sosial\" yang mencegah penyimpangan, sesuai dengan fungsi lembaga sosial poin ketiga."
+      },
+      {
+        id: 18,
+        category: "Teori Lembaga",
+        stimulus: "Alvin L. Bertrand menyatakan bahwa lembaga sosial adalah kumpulan norma sosial yang telah diciptakan.",
+        question: "Sebelum menjadi lembaga, norma-norma ini bermula dari...",
+        options: [
+          { key: "A", text: "Kebiasaan-kebiasaan individu yang terhimpun dan dikelompokkan untuk memenuhi kebutuhan." },
+          { key: "B", text: "Paksaan aparat keamanan terhadap masyarakat pedalaman untuk segera menjadi modern." },
+          { key: "C", text: "Konflik bersenjata antarkelompok yang akhirnya dimenangkan oleh satu kelompok dominan." },
+          { key: "D", text: "Peraturan tertulis yang sengaja dibentuk oleh sekelompok elit untuk mencari untung." },
+          { key: "E", text: "Pola pikir irasional masyarakat tradisional yang belum mengenal aksara baca tulis." }
+        ],
+        correct: "A",
+        explanation: "Menurut modul, apabila kebiasaan dan cara-cara pemenuhan kebutuhan dikelompokkan akan terhimpun menjadi lembaga sosial."
+      },
+      {
+        id: 19,
+        category: "Karakteristik Lembaga",
+        stimulus: "Dalam sebuah keluarga Jawa keraton, terdapat larangan tidak tertulis untuk mendahului orang tua saat makan. Walau tidak ada buku peraturannya, jika dilanggar akan mendapat teguran keras.",
+        question: "Ini membuktikan bahwa salah satu karakteristik lembaga sosial mencakup...",
+        options: [
+          { key: "A", text: "Daya tahan yang rapuh bila berhadapan dengan aturan konstitusi hukum." },
+          { key: "B", text: "Alat kelengkapan yang berupa sanksi pidana dan denda materiil yang berat." },
+          { key: "C", text: "Tata tertib dan tradisi sebagai panutan, baik yang tertulis maupun tidak tertulis." },
+          { key: "D", text: "Ideologi politik lokal yang bertentangan dengan dasar-dasar negara demokrasi." },
+          { key: "E", text: "Simbol kebangsawanan yang mewajibkan anak-anak untuk selalu bersikap kaku." }
+        ],
+        correct: "C",
+        explanation: "Aturan tidak tertulis berupa larangan mendahului makan adalah implementasi dari karakteristik: \"Memiliki tata tertib dan tradisi (baik tertulis/tidak tertulis) sebagai panutan anggotanya\"."
+      },
+      {
+        id: 20,
+        category: "Karakteristik Lembaga",
+        stimulus: "Meskipun rezim pemerintahan berganti berkali-kali dari masa penjajahan hingga reformasi, sistem pendidikan yang menggunakan buku, ruang kelas, dan guru tetap dipertahankan keberadaannya.",
+        question: "Karakteristik sosiologis yang menjelaskan fenomena tidak lenyapnya sistem ini adalah...",
+        options: [
+          { key: "A", text: "Punya simbol yang mengikat emosi semua kelompok umur." },
+          { key: "B", text: "Usianya lebih singkat dibanding umur anggota elit pembuatnya." },
+          { key: "C", text: "Punya alat kelengkapan yang bersifat sementara dan mudah diubah." },
+          { key: "D", text: "Punya daya tahan yang kuat karena dibentuk dalam waktu lama." },
+          { key: "E", text: "Punya sistem gagasan yang mudah diadaptasi kelompok anarkis." }
+        ],
+        correct: "D",
+        explanation: "Kemampuan sebuah sistem untuk tetap bertahan, tidak lenyap begitu saja meski zaman berubah, merupakan cerminan dari karakteristik: \"Punya Daya Tahan\"."
+      },
+      {
+        id: 21,
+        category: "Fungsi Keluarga",
+        stimulus: "Di masa remaja, seorang anak sering merasa tertekan oleh pergaulan peer group-nya. Saat ia pulang, ibu dan ayahnya selalu meluangkan waktu untuk mendengarkan keluh kesahnya dan memberikan pelukan.",
+        question: "Fungsi yang dijalankan oleh lembaga keluarga pada skenario ini adalah...",
+        options: [
+          { key: "A", text: "Fungsi Edukatif, di mana orang tua menjadi teladan kecerdasan bagi sang anak." },
+          { key: "B", text: "Fungsi Perlindungan, di mana rumah menjadi benteng fisik dari serangan musuh." },
+          { key: "C", text: "Fungsi Sosialisasi, di mana anak mulai dilatih bersikap di masyarakat luas kelak." },
+          { key: "D", text: "Fungsi Afeksional, di mana anak sangat membutuhkan kehangatan perasaan emosional." },
+          { key: "E", text: "Fungsi Ekonomi, di mana ayah memberikan bantuan dana jajan bagi kebutuhan anak." }
+        ],
+        correct: "D",
+        explanation: "Memberikan dukungan moral, pelukan, dan rasa kedekatan perasaan yang hangat adalah esensi murni dari Fungsi Afeksional keluarga."
+      },
+      {
+        id: 22,
+        category: "Fungsi Keluarga",
+        stimulus: "Orang tua mengajak anaknya yang masih balita untuk selalu mengucapkan \"terima kasih\" saat menerima barang, dan \"maaf\" saat melakukan kesalahan.",
+        question: "Proses pengenalan tata krama sejak dini ini paling tepat merepresentasikan...",
+        options: [
+          { key: "A", text: "Fungsi Edukatif yang berfokus pada kecerdasan akademis sains." },
+          { key: "B", text: "Fungsi Sosialisasi sebagai wadah sosialisasi primer di masyarakat." },
+          { key: "C", text: "Fungsi Afeksional untuk mengikat tali persaudaraan sedarah biologis." },
+          { key: "D", text: "Fungsi Reproduksi guna meneruskan tradisi keturunan tanpa cela." },
+          { key: "E", text: "Fungsi Perlindungan psikologis dari ancaman bahaya asimilasi budaya." }
+        ],
+        correct: "B",
+        explanation: "Mengajarkan cara hidup, nilai, dan tata krama interaksi dasar agar kelak siap terjun ke masyarakat adalah \"Fungsi Sosialisasi\" (bersifat primer di lingkungan keluarga)."
+      },
+      {
+        id: 23,
+        category: "Fungsi Keluarga",
+        stimulus: "Kehadiran pos satpam dan kewajiban lapor 1x24 jam bagi tamu yang menginap di kawasan perumahan merupakan ekstensi dari upaya menjaga ketenteraman anggota keluarga di rumah.",
+        question: "Hal ini beririsan erat dengan fungsi keluarga berupa...",
+        options: [
+          { key: "A", text: "Fungsi Afeksional dan Fungsi Reproduksi yang berkelanjutan." },
+          { key: "B", text: "Fungsi Edukatif dan Fungsi Ekonomi yang terdistribusi adil." },
+          { key: "C", text: "Fungsi Perlindungan baik secara psikologis maupun secara fisik." },
+          { key: "D", text: "Fungsi Sosialisasi sekunder di lingkungan eksternal bermasyarakat." },
+          { key: "E", text: "Fungsi Manifes dari sistem ideologi kemasyarakatan yang kuat." }
+        ],
+        correct: "C",
+        explanation: "Memastikan ketenteraman fisik (keamanan dari gangguan tamu tak dikenal) memberikan rasa keterlindungan fisik, yang merupakan \"Fungsi Perlindungan\" keluarga."
+      },
+      {
+        id: 24,
+        category: "Fungsi Agama",
+        stimulus: "Seringkali ketika seseorang menghadapi kegagalan bisnis yang menghancurkan hartanya, ia akan beralih memperbanyak ibadah malam untuk menenangkan pikirannya dari stres berat.",
+        question: "Fungsi pranata agama dalam kasus empiris ini adalah...",
+        options: [
+          { key: "A", text: "Menjadi sarana untuk mengelak dari jerat hukum utang-piutang negara." },
+          { key: "B", text: "Memberikan dukungan psikologis untuk menumbuhkan rasa percaya diri." },
+          { key: "C", text: "Memberikan identitas yang khas untuk membedakannya dengan orang sukses." },
+          { key: "D", text: "Mempersiapkan peranan sosial kelompok minoritas pada masa depan negara." },
+          { key: "E", text: "Mengubah stratifikasi politik yang ada agar ia bisa kembali menduduki jabatan." }
+        ],
+        correct: "B",
+        explanation: "Pelarian ke ranah spiritual untuk mendapat ketenangan stres membuktikan fungsi agama sebagai pemberi dukungan psikologis dan pemecah persoalan batin."
+      },
+      {
+        id: 25,
+        category: "Fungsi Pendidikan",
+        stimulus: "Sekolah Menengah Atas mewajibkan seluruh siswanya untuk mempelajari sejarah perjuangan kemerdekaan. Upaya ini bukan sekadar mengejar nilai ujian, melainkan agar nilai-nilai patriotisme tidak hilang ditelan zaman.",
+        question: "Fungsi lembaga pendidikan di sini adalah...",
+        options: [
+          { key: "A", text: "Menjadi saluran pewarisan kebudayaan bagi generasi penerus." },
+          { key: "B", text: "Mempersiapkan anak didik terjun ke pasar kerja kompetitif." },
+          { key: "C", text: "Mengawasi berjalannya norma-norma hukum pidana dan perdata." },
+          { key: "D", text: "Melindungi kaum terpelajar dari ancaman radikalisme global." },
+          { key: "E", text: "Meningkatkan kemampuan individu secara fisik dan biologis murni." }
+        ],
+        correct: "A",
+        explanation: "Mewariskan nilai sejarah, budaya, dan semangat perjuangan ke generasi baru adalah penjabaran dari \"saluran pewarisan kebudayaan\"."
+      },
+      {
+        id: 26,
+        category: "Fungsi Politik",
+        stimulus: "Pemerintah mengalokasikan triliunan rupiah untuk menyalurkan subsidi pupuk kepada petani demi mengamankan pasokan beras nasional. Aktivitas ini secara nyata dirancang untuk kemakmuran bersama.",
+        question: "Dilihat dari teori kelembagaan politik, kebijakan ini menjalankan...",
+        options: [
+          { key: "A", text: "Fungsi laten lembaga ekonomi dalam melanggengkan kekuasaan para tengkulak." },
+          { key: "B", text: "Fungsi manifes lembaga politik untuk menciptakan kesejahteraan umum warga." },
+          { key: "C", text: "Fungsi represif lembaga hukum dalam menindak tegas oknum pencuri hasil panen." },
+          { key: "D", text: "Fungsi afeksional lembaga keluarga petani yang sangat bergantung pada hasil bumi." },
+          { key: "E", text: "Fungsi sosialisasi sekunder pemerintah dalam mengajarkan teknik bertani canggih." }
+        ],
+        correct: "B",
+        explanation: "Subsidi yang direncanakan dan disadari untuk kemakmuran rakyat (kesejahteraan umum) adalah tujuan disengaja alias \"Fungsi Manifes\" lembaga politik."
+      },
+      {
+        id: 27,
+        category: "Fungsi Politik",
+        stimulus: "Pembentukan kabinet kementerian selalu memunculkan figur-figur pejabat publik yang memiliki privilese, gaji tinggi, dan pengawalan ketat, yang jauh berbeda dari kondisi rakyat sipil biasa.",
+        question: "Walau tidak diniatkan, perbedaan hierarki kuasa ini selalu muncul sebagai...",
+        options: [
+          { key: "A", text: "Fungsi manifes lembaga keamanan untuk melindungi seluruh tokoh sentral negara." },
+          { key: "B", text: "Kegagalan lembaga ekonomi dalam meratakan pendapatan domestik bruto nasional." },
+          { key: "C", text: "Fungsi laten lembaga politik yang tanpa disengaja menciptakan stratifikasi politik." },
+          { key: "D", text: "Bukti rusaknya keteraturan sosial akibat menguatnya organisasi geng tak resmi." },
+          { key: "E", text: "Realitas tahapan ajeg pada perkembangan birokrasi pemerintahan era modernisasi." }
+        ],
+        correct: "C",
+        explanation: "Timbulnya kelas-kelas sosial (pejabat vs rakyat biasa) dari sistem pemerintahan adalah efek tak terhindarkan dan bukan tujuan utama, sehingga ini adalah Fungsi Laten (menciptakan stratifikasi politik)."
+      },
+      {
+        id: 28,
+        category: "Fungsi Ekonomi",
+        stimulus: "Koperasi Unit Desa (KUD) tidak hanya menampung gabah hasil panen (produksi) tetapi juga menyediakan truk untuk menyalurkannya ke pasar kota (distribusi), serta menjual kebutuhan sembako bagi warga desa (konsumsi).",
+        question: "KUD ini merupakan representasi sempurna dari fungsi umum...",
+        options: [
+          { key: "A", text: "Lembaga Keluarga secara ekonomi makro." },
+          { key: "B", text: "Lembaga Pendidikan kejuruan bisnis." },
+          { key: "C", text: "Lembaga Politik daerah otonom." },
+          { key: "D", text: "Lembaga Ekonomi masyarakat." },
+          { key: "E", text: "Lembaga Hukum komersial formal." }
+        ],
+        correct: "D",
+        explanation: "Lembaga yang menjadi pedoman dan wadah berjalannya kegiatan produksi, distribusi, dan konsumsi adalah definisi mutlak dari Lembaga Ekonomi."
+      },
+      {
+        id: 29,
+        category: "Fungsi Hukum",
+        stimulus: "Sering kali aparat kepolisian melakukan patroli malam keliling permukiman, meskipun tidak ada laporan kejahatan. Tindakan pencegahan ini dilakukan untuk memastikan masyarakat merasa tenteram.",
+        question: "Fungsi lembaga hukum pada ilustrasi ini bersifat...",
+        options: [
+          { key: "A", text: "Represif, guna menghukum pelaku kriminal secara adil." },
+          { key: "B", text: "Preventif, guna melindungi warga masyarakat dari kemungkinan jahat." },
+          { key: "C", text: "The rule of law, untuk memastikan hakim selalu kebal intervensi." },
+          { key: "D", text: "Kuratif, guna menyembuhkan penyakit mental para residivis jalanan." },
+          { key: "E", text: "Eksekutif, untuk menjalankan putusan ketetapan majelis dewan juri." }
+        ],
+        correct: "B",
+        explanation: "Patroli sebelum terjadinya kejahatan merupakan tindakan pencegahan (preventif) guna melindungi warga masyarakat."
+      },
+      {
+        id: 30,
+        category: "Fungsi Laten",
+        stimulus: "Di bangku kuliah, banyak mahasiswa yang menunda pernikahan karena harus fokus merampungkan skripsi. Secara tidak disadari, keberadaan institusi universitas memperpanjang masa remaja seseorang dan menekan laju pertumbuhan penduduk usia muda.",
+        question: "Fenomena ini merupakan bentuk dari...",
+        options: [
+          { key: "A", text: "Fungsi laten lembaga pendidikan yang tidak diutarakan secara eksplisit." },
+          { key: "B", text: "Tujuan manifes lembaga pendidikan tinggi negeri untuk mengurangi kemiskinan." },
+          { key: "C", text: "Dampak negatif dari approved institution terhadap nilai-nilai pernikahan." },
+          { key: "D", text: "Keberhasilan fungsi regulatif dalam mengontrol struktur tatanan masyarakat." },
+          { key: "E", text: "Fungsi edukatif keluarga yang berbenturan dengan kebijakan menteri pendidikan." }
+        ],
+        correct: "A",
+        explanation: "Menunda usia pernikahan atau memperpanjang masa remaja bukanlah tujuan utama/disadari sekolah (sekolah ditujukan untuk belajar). Maka, ini adalah Fungsi Laten lembaga pendidikan."
+      },
+      {
+        id: 31,
+        category: "Keteraturan Sosial",
+        stimulus: "Di hari pertama masa orientasi siswa, semua peserta didik baru terlihat sangat rapi dan tertib mematuhi instruksi senior karena rasa takut. Namun saat senior lengah, mereka kembali ribut.",
+        question: "Kondisi kepatuhan sesaat yang rapuh ini disebut sebagai tahapan...",
+        options: [
+          { key: "A", text: "Keteraturan sosial yang sudah permanen." },
+          { key: "B", text: "Pola budaya interaksi pelajar masa orientasi." },
+          { key: "C", text: "Keajegan yang diuji oleh waktu berkelanjutan." },
+          { key: "D", text: "Tertib sosial yang mengandalkan iklim saling menghargai." },
+          { key: "E", text: "Disorganisasi massal akibat absennya aparat pengawas formal." }
+        ],
+        correct: "D",
+        explanation: "Fase paling awal di mana warga patuh karena pengawasan/situasi tertentu namun belum mengakar kuat disebut \"Tertib Sosial\"."
+      },
+      {
+        id: 32,
+        category: "Keteraturan Sosial",
+        stimulus: "Setelah satu semester berlalu, siswa-siswa di kelas tersebut tidak lagi perlu diawasi senior. Mereka belajar piket menyapu kelas karena sadar kebersihan kelas adalah hak dan kewajiban mereka bersama demi kenyamanan.",
+        question: "Kesadaran melaksanakan hak kewajiban dengan tanggung jawab ini menandakan keteraturan telah masuk tahap...",
+        options: [
+          { key: "A", text: "Pola, karena sudah membudaya di luar nalar." },
+          { key: "B", text: "Keteraturan, di mana kewajiban mulai dilaksanakan sadar." },
+          { key: "C", text: "Tertib Sosial, karena mereka saling menghargai senioritas." },
+          { key: "D", text: "Disintegrasi, akibat ketiadaan komando terpusat dari ketua." },
+          { key: "E", text: "Keajegan, karena telah diyakini kebenarannya oleh pihak sekolah." }
+        ],
+        correct: "B",
+        explanation: "Transisi di mana warga melaksanakan hak dan kewajibannya dengan penuh tanggung jawab sesuai sistem adalah tahapan \"Keteraturan\" (satu tingkat di atas Tertib Sosial)."
+      },
+      {
+        id: 33,
+        category: "Keteraturan Sosial",
+        stimulus: "Tradisi mudik Lebaran telah berlangsung sejak era 1970-an di Indonesia. Setiap tahun polanya konsisten: berburu tiket, macet di jalan raya, lalu berkumpul dengan sanak saudara. Hal ini dilakukan terus-menerus karena diyakini dapat menguatkan silaturahmi.",
+        question: "Praktik konsisten yang diyakini kebenarannya ini merupakan ciri tahapan...",
+        options: [
+          { key: "A", text: "Tertib Sosial musiman semata." },
+          { key: "B", text: "Tahap Pola budaya tak terbantahkan." },
+          { key: "C", text: "Tahap Keajegan sosial kultural." },
+          { key: "D", text: "Tahap Keteraturan normatif masyarakat." },
+          { key: "E", text: "Tahap Regulative institution paksaan." }
+        ],
+        correct: "C",
+        explanation: "Konsistensi (ajeg) yang dikerjakan berjalan sesuai ketentuan, rutin, dan keberadaannya \"sudah diyakini kebenarannya\" adalah definsi pasti dari tahapan \"Keajegan\"."
+      },
+      {
+        id: 34,
+        category: "Keteraturan Sosial",
+        stimulus: "Ketika berkendara di jalan raya pedesaan, budaya untuk mematikan mesin atau menuntun motor saat melintasi warga yang sedang berkumpul lelayu (berduka) sudah menjadi aturan hidup baku yang diterima total dan permanen oleh seluruh warga.",
+        question: "Kondisi puncak ini dikenal dengan tahap...",
+        options: [
+          { key: "A", text: "Keteraturan primer." },
+          { key: "B", text: "Tertib Sosial." },
+          { key: "C", text: "Keajegan statis." },
+          { key: "D", text: "Terpola (Pola)." },
+          { key: "E", text: "Institusi subsider." }
+        ],
+        correct: "D",
+        explanation: "Tahap di mana keajegan telah terwujud permanen, teruji, diterima semua pihak, dan menjadi pakem/pola hidup baku adalah tahap akhir \"Terpola\" (Pattern)."
+      },
+      {
+        id: 35,
+        category: "Tahapan Keteraturan",
+        stimulus: "Sebuah perusahaan tekstil awalnya sering mengalami masalah buruh yang malas-malasan. Namun setelah diberlakukan sistem bonus transparan yang dihormati bersama, suasana berubah. Buruh bekerja gigih karena sadar kinerjanya menentukan bonusnya.",
+        question: "Perubahan perilaku menghargai (Tertib) menjadi tanggung jawab penuh (Keteraturan) ini membuktikan...",
+        options: [
+          { key: "A", text: "Ketakutan buruh terhadap pemecatan massal secara sepihak." },
+          { key: "B", text: "Tahapan keteraturan berkembang dari sekadar iklim harmonis menjadi pemenuhan tanggung jawab." },
+          { key: "C", text: "Tahap keajegan terlewati begitu saja langsung menuju budaya pola reward and punishment." },
+          { key: "D", text: "Kegagalan nilai-norma lokal yang tergantikan oleh arus asimilasi budaya kapitalis modern." },
+          { key: "E", text: "Perlunya aparat penegak hukum polisi untuk mencampuri urusan internal sebuah pabrik swasta." }
+        ],
+        correct: "B",
+        explanation: "Skenario menggambarkan evolusi dari iklim tertib menjadi pemenuhan kewajiban (keteraturan), yang secara teori mengkonfirmasi bahwa keteraturan berkembang secara bertahap."
+      },
+      {
+        id: 36,
+        category: "Tokoh Sosiologi",
+        stimulus: "Tingginya solidaritas pada masyarakat pegunungan memicu terciptanya kerja sama panen yang amat harmonis.",
+        question: "Fenomena keteraturan sosial akibat ikatan solidaritas kuat yang meminimalisir ancaman kompetisi ini sangat selaras dengan gagasan sosiolog...",
+        options: [
+          { key: "A", text: "Selo Soemardjan." },
+          { key: "B", text: "Soerjono Soekanto." },
+          { key: "C", text: "Emile Durkheim." },
+          { key: "D", text: "Alvin L. Bertrand." },
+          { key: "E", text: "John Lewis Gillin." }
+        ],
+        correct: "C",
+        explanation: "Definisi keteraturan sosial sebagai \"fenomena yang menciptakan kesalingtergantungan karena ikatan solidaritas kuat (meski dibayangi kompetisi/konflik)\" adalah rumusan otentik Emile Durkheim."
+      },
+      {
+        id: 37,
+        category: "Kegagalan Keteraturan",
+        stimulus: "Seorang pengendara marah ketika ditegur karena melawan arah, padahal jelas ia membahayakan pengguna jalan lain.",
+        question: "Kegagalan terciptanya keteraturan di jalan raya pada kasus ini, jika merujuk rumusan Budi Pramono, dikarenakan...",
+        options: [
+          { key: "A", text: "Tidak adanya ikatan solidaritas organis khas pedesaan di jalan raya ibu kota." },
+          { key: "B", text: "Absennya institusi dasar (basic institution) dalam mengawal pembentukan karakter." },
+          { key: "C", text: "Hubungan berlangsung secara harmonis namun terdapat pihak dominan yang berkuasa." },
+          { key: "D", text: "Terjadinya hubungan interaksi sosial yang mengakibatkan pihak lain dirugikan haknya." },
+          { key: "E", text: "Melemahnya sanksi fungsi laten pengadilan terhadap kejahatan lalu lintas kategori ringan." }
+        ],
+        correct: "D",
+        explanation: "Budi Pramono menegaskan keteraturan sosial tercipta bila interaksi berlangsung selaras, serasi \"tanpa adanya pihak yang dirugikan\". Melawan arah jelas merugikan/membahayakan pihak lain."
+      },
+      {
+        id: 38,
+        category: "Indikator Keteraturan",
+        stimulus: "Suatu wilayah dikatakan tidak tertib sosial apabila warganya membiarkan tetangganya membuang limbah popok ke sungai karena merasa \"bukan urusan saya\".",
+        question: "Acuhnya warga ini berlawanan langsung dengan indikator keteraturan empiris berupa...",
+        options: [
+          { key: "A", text: "Kepastian datangnya hukuman kuratif dari pengadilan perdata setempat." },
+          { key: "B", text: "Lahirnya norma-norma baru yang bersifat sekunder (subsidiary institution)." },
+          { key: "C", text: "Fungsi manifes partai politik yang luput merangkul para penduduk pedesaan." },
+          { key: "D", text: "Terjadinya kegiatan kontrol sosial lewat saling mengingatkan antartetangga/saudara." },
+          { key: "E", text: "Tuntutan tugas memproduksi barang daur ulang yang membebani warga secara mental." }
+        ],
+        correct: "D",
+        explanation: "Keteraturan sosial empiris dalam keseharian dicirikan dari \"terjadinya kegiatan untuk saling mengingatkan antarteman, tetangga, mengenai pelanggaran\". Sikap apatis merusak indikator kontrol sosial organik ini."
+      },
+      {
+        id: 39,
+        category: "Syarat Keteraturan",
+        stimulus: "Keberhasilan wali kota meredam amarah massa yang memprotes sengketa lahan Elos Dago tanpa terjadinya perusakan fasilitas umum membuktikan bahwa tahapan keteraturan bisa bertahan di tengah konflik.",
+        question: "Kunci utamanya adalah warga didampingi oleh figur yang paham hukum. Hal ini menggambarkan...",
+        options: [
+          { key: "A", text: "Tunduknya hukum negara terhadap amukan massa anarkis." },
+          { key: "B", text: "Penggunaan kekerasan represif untuk membungkam kebebasan." },
+          { key: "C", text: "Kepatuhan hukum dan pentingnya aparat/advokat penjaga ketertiban." },
+          { key: "D", text: "Musnahnya pola budaya demokrasi di kalangan kaum marginal bawah." },
+          { key: "E", text: "Menyerahnya fungsi regulatif institusi negara pada kelompok preman." }
+        ],
+        correct: "C",
+        explanation: "Warga yang menahan diri berkat advokat membuktikan kepatuhan dan pentingnya pengawal norma dalam mempertahankan tertib sosial di saat krisis/konflik."
+      },
+      {
+        id: 40,
+        category: "Tahapan Keteraturan",
+        stimulus: "",
+        question: "Di bawah ini, manakah yang bukan merupakan tahapan sistematis terciptanya sebuah keteraturan sosial komprehensif dari yang paling dasar hingga paling tinggi?",
+        options: [
+          { key: "A", text: "Pembentukan regulasi institusi tanpa partisipasi rakyat awam." },
+          { key: "B", text: "Terciptanya iklim tertib sosial karena saling menghargai." },
+          { key: "C", text: "Tercapainya keteraturan ketika hak dan kewajiban dipatuhi." },
+          { key: "D", text: "Mengakar menjadi keajegan yang diyakini konsistensinya secara mutlak." },
+          { key: "E", text: "Mewujud ke dalam suatu tatanan norma yang terpola menjadi kebiasaan ajeg." }
+        ],
+        correct: "A",
+        explanation: "Tahapan keteraturan secara berurutan adalah: Tertib Sosial -> Keteraturan -> Keajegan -> Terpola. Opsi A (pembentukan regulasi elit) bukan termasuk tahapan."
+      },
+      {
+        id: 41,
+        category: "Syarat Keteraturan",
+        stimulus: "Saat sebuah daerah diwajibkan menggunakan helm oleh perda yang baru, mayoritas warga melanggarnya karena merasa di kampung mereka tidak ada lalu lintas cepat.",
+        question: "Kasus ini membuktikan bahwa syarat terciptanya keteraturan sosial sangat menuntut...",
+        options: [
+          { key: "A", text: "Sosialisasi paksaan dan kekerasan aparat keamanan tanpa pandang bulu di seluruh tempat." },
+          { key: "B", text: "Terdapat norma sosial yang dianggap sesuai (relevan) dengan keadaan peradaban warga setempat." },
+          { key: "C", text: "Penggantian aparatur sipil negara dengan personel dari latar belakang militer yang lebih tegas." },
+          { key: "D", text: "Pembubaran basic institution yang tidak mau mendukung program keselamatan berlalu lintas." },
+          { key: "E", text: "Peningkatan denda tilang materiel hingga menyebabkan efek kemiskinan pada pelanggarnya." }
+        ],
+        correct: "B",
+        explanation: "Syarat mutlak keteraturan: \"Terdapat norma sosial yang dianggap sesuai/relevan dengan keadaan\". Warga melanggar karena merasa norma (helm) tidak relevan dengan kondisi kampung lambat mereka."
+      },
+      {
+        id: 42,
+        category: "Syarat Keteraturan",
+        stimulus: "Dalam sistem pekerjaan produksi masal, seorang karyawan mengakui telah melakukan kesalahan potong kain yang merugikan pabrik jutaan rupiah, lalu ia siap menerima sanksi.",
+        question: "Integritas karyawan ini menunjang keteraturan sosial berkat terpenuhinya syarat esensial berupa...",
+        options: [
+          { key: "A", text: "Pengawasan kejam berbasis kamera pengintai dari para pimpinan perusahaan eksklusif." },
+          { key: "B", text: "Tumbuhnya kelas-kelas stratifikasi sosial yang sangat jauh senjangnya di dalam pabrik." },
+          { key: "C", text: "Adanya perasaan tanggung jawab moral dan kesiapan menerima konsekuensi secara ksatria." },
+          { key: "D", text: "Terdapatnya aparat hukum kepolisian yang sigap menangkap karyawan maling tersebut di tempat." },
+          { key: "E", text: "Fungsi sosialisasi keluarga pekerja yang membebani mental pekerja untuk mencari kekayaan instan." }
+        ],
+        correct: "C",
+        explanation: "Contoh keteraturan di lingkungan kerja: \"menunjang keteraturan diperlukan siap untuk mengakui kesalahan... menandakan adanya perasaan bertanggung jawab... Cerminan moral menjaga keteraturan\"."
+      },
+      {
+        id: 43,
+        category: "Syarat Keteraturan",
+        stimulus: "Sebuah negara memiliki konstitusi yang amat sempurna dan warga yang amat religius, namun tingkat kriminalitas jalanan dan korupsinya tertinggi di dunia.",
+        question: "Dari kacamata syarat keteraturan sosial, pilar manakah yang ambruk pada skenario negara fiktif tersebut?",
+        options: [
+          { key: "A", text: "Kesadaran personal tentang betapa krusialnya harmoni ketenteraman sosial antarsesama." },
+          { key: "B", text: "Ketersediaan nilai yang bersifat crescive institution karena dihilangkan paksa oleh elit." },
+          { key: "C", text: "Konsistensi kinerja dari para aparat penegak hukum di dalam Lembaga Hukum formalnya." },
+          { key: "D", text: "Fungsi edukatif lembaga pendidikan dalam mengajarkan hitungan matematika ekonomi rasional." },
+          { key: "E", text: "Terserapnya fungsi laten birokrasi partai yang beroperasi untuk melanggengkan kekuasaan penuh." }
+        ],
+        correct: "C",
+        explanation: "Jika norma bagus dan warga sadar agama, tapi kejahatan jalan, maka syarat ketiga yang gagal yakni: \"Terdapat aparat penegak hukum yang konsisten dalam menjalankan wewenangnya\"."
+      },
+      {
+        id: 44,
+        category: "Keteraturan Mikro",
+        stimulus: "Kepatuhan jam malam pukul 21:00 di sebuah rumah sering dianggap kekangan.",
+        question: "Padahal, kepatuhan mikro ini krusial sebagai fondasi makro karena...",
+        options: [
+          { key: "A", text: "Mengizinkan orang tua beristirahat tanpa dibebani pikiran tugas membimbing pendidikan sang anak." },
+          { key: "B", text: "Membina komunikasi, menguatkan ikatan, dan membiasakan disiplin keteraturan dari skala terkecil." },
+          { key: "C", text: "Mengurangi biaya konsumsi listrik dan pengeluaran ekonomi keluarga secara amat drastis di malam hari." },
+          { key: "D", text: "Meniadakan campur tangan aparat kepolisian di dalam penyelesaian sengketa wilayah batas perumahan." },
+          { key: "E", text: "Membatasi peran subsidiary institution seperti kafe malam dalam memengaruhi wawasan ideologi politik." }
+        ],
+        correct: "B",
+        explanation: "Alasan kepatuhan jam malam di keluarga adalah \"sebagai wujud membina komunikasi dan saling menguatkan serta mengingatkan satu sama lainnya\", membangun keteraturan dasar."
+      },
+      {
+        id: 45,
+        category: "Syarat Keteraturan",
+        stimulus: "Demonstrasi buruh menuntut kenaikan upah memblokir satu lajur jalan raya, namun mereka menyisakan satu lajur khusus darurat untuk ambulans dan kendaraan umum.",
+        question: "Tindakan kompromis massa ini menegaskan terwujudnya syarat utama keteraturan yaitu...",
+        options: [
+          { key: "A", text: "Kesadaran warga mengenai pentingnya keteraturan masyarakat tanpa merugikan penderitaan umum total." },
+          { key: "B", text: "Tekanan fisik dari kelompok preman bayaran unsanctioned institution yang meresahkan jalanan." },
+          { key: "C", text: "Fungsi laten regulatif yang mendadak muncul ketika aparat absen menjaga pagar pembatas aksi massa." },
+          { key: "D", text: "Pergeseran norma adat desa menjadi aturan formal negara modern kapitalis industri maju." },
+          { key: "E", text: "Lenyapnya hierarki kelas stratifikasi pengusaha dan buruh akibat dialog damai di tepi jalan aspal." }
+        ],
+        correct: "A",
+        explanation: "Menyisakan jalan ambulans/warga membuktikan pengunjuk rasa memiliki kesadaran akan pentingnya keteraturan agar tidak merugikan pihak lain sepenuhnya."
+      },
+      {
+        id: 46,
+        category: "Fungsi Aparat",
+        stimulus: "",
+        question: "Mengapa peran Regulative Institution (seperti pengadilan dan kepolisian) diposisikan sangat sentral (syarat ketiga) dalam mewujudkan Keteraturan Sosial masyarakat plural/majemuk?",
+        options: [
+          { key: "A", text: "Karena lembaga hukum berwenang memonopoli harga barang dagang agar inflasi stabil." },
+          { key: "B", text: "Karena kepolisian memiliki wewenang untuk menghapus seluruh crescive institution lokal." },
+          { key: "C", text: "Karena tanpa aparat yang konsisten, sanksi norma hanya menjadi imbauan tanpa kekuatan mengikat." },
+          { key: "D", text: "Karena pengadilan bertugas menyediakan kebutuhan jasmani dasar secara menyeluruh bagi para hakim." },
+          { key: "E", text: "Karena masyarakat majemuk selalu membutuhkan hiburan sekunder berupa tontonan ketegangan sidang." }
+        ],
+        correct: "C",
+        explanation: "Aparat penegak hukum disyaratkan harus konsisten karena tanpa enforcer, norma sosial formal di masyarakat majemuk (yang rentan konflik) akan kehilangan daya paksanya."
+      },
+      {
+        id: 47,
+        category: "Keteraturan Organik",
+        stimulus: "Setiap Jumat Kliwon, penduduk pedalaman menyempatkan diri membersihkan mata air sumber kehidupan mereka secara gotong royong tanpa adanya perintah tertulis pemerintah.",
+        question: "Hubungan fenomena ini dengan keteraturan sosial adalah...",
+        options: [
+          { key: "A", text: "Bukti kegagalan sistem hukum formal dalam menjangkau kawasan pelosok desa pedalaman rimbun." },
+          { key: "B", text: "Penciptaan keteraturan yang dilandasi oleh kepatuhan tinggi terhadap nilai crescive institution." },
+          { key: "C", text: "Munculnya disintegrasi birokrasi akibat tumpang tindih antara aturan lokal dan aturan konstitusi negara." },
+          { key: "D", text: "Keberhasilan operative institution pemerintah dalam mengeksploitasi cadangan air mineral warga lokal." },
+          { key: "E", text: "Kepatuhan paksa tahap \"tertib sosial\" yang ditunggangi oleh ketakutan warga terhadap roh-roh gaib kuno." }
+        ],
+        correct: "B",
+        explanation: "Aturan gotong royong desa adalah institusi organik (crescive), dan kepatuhan sukarela terhadap nilai adat tersebut adalah wujud penciptaan keteraturan dari bawah (kepatuhan tinggi)."
+      },
+      {
+        id: 48,
+        category: "Kontrol Sosial",
+        stimulus: "Di kota metropolitan yang tingkat individualisnya tinggi, fenomena warga saling tegur saat tetangga menyetel musik keras jam 1 pagi semakin jarang ditemui.",
+        question: "Hilangnya \"kontrol sosial organik\" ini menyebabkan kota metropolitan rawan mengalami masalah dalam tahap...",
+        options: [
+          { key: "A", text: "Mempertahankan tahapan tertib sosial musiman." },
+          { key: "B", text: "Mewujudkan fungsi manifes ekonomi bisnis kapitalisme." },
+          { key: "C", text: "Memelihara keajegan solidaritas mekanis khas komunal murni." },
+          { key: "D", text: "Mengembalikan tahap terpola ke fase institusi kerabat kuno." },
+          { key: "E", text: "Menciptakan keteraturan sosial karena abainya kesadaran individu." }
+        ],
+        correct: "E",
+        explanation: "Saling mengingatkan adalah contoh nyata keteraturan sehari-hari. Jika sikap ini hilang, maka syarat \"kesadaran warga akan pentingnya keteraturan kolektif\" memudar."
+      },
+      {
+        id: 49,
+        category: "Integrasi Lembaga",
+        stimulus: "Lembaga pariwisata (Subsidiary Institution) tidak akan bisa beroperasi bila aparat kepolisian (Regulative Institution) gagal menjaga keamanan jalan dan keluarga (Basic Institution) mengalami krisis keuangan.",
+        question: "Kesimpulan paling tepat dari ilustrasi ini adalah...",
+        options: [
+          { key: "A", text: "Keberadaan institusi sekunder selalu merusak pilar kemapanan institusi esensial dan hukum perdata." },
+          { key: "B", text: "Keteraturan sosial hanya dapat tercipta jika seluruh lembaga sosial dimusnahkan dan diganti hukum rimba." },
+          { key: "C", text: "Interaksi antarkelompok manusia tidak pernah melibatkan lembaga sosial yang berkarakter operative laba." },
+          { key: "D", text: "Tatanan lembaga sosial saling terhubung hierarkis untuk menjamin tegaknya sebuah keteraturan kolektif." },
+          { key: "E", text: "Aparat hukum memiliki fungsi laten untuk menyabotase kebangkitan sektor ekonomi pelesir hiburan malam." }
+        ],
+        correct: "D",
+        explanation: "Kebergantungan pariwisata pada keamanan dan keuangan membuktikan bahwa semua tipe lembaga sosial memiliki jaring koneksi untuk menopang keteraturan kolektif (sistem integrasi)."
+      },
+      {
+        id: 50,
+        category: "Tahap Pola",
+        stimulus: "Di sebuah perempatan, jika lampu merah menyala, semua kendaraan akan berhenti walau tidak ada aparat yang berjaga.",
+        question: "Jika direnungkan secara sosiologis, perilaku massal yang sangat seragam dan otomatis ini melambangkan titik kulminasi bersatunya...",
+        options: [
+          { key: "A", text: "Aparat penegak hukum dan kekuatan unsanctioned institution kriminal." },
+          { key: "B", text: "Tahap Pola budaya dengan tingginya kesadaran internal warga akan norma relevan." },
+          { key: "C", text: "Fungsi laten pendidikan dengan fungsi manifes pengumpulan pendapatan pajak motor." },
+          { key: "D", text: "Paksaan penguasa (tertib sosial) dengan ketakutan kolektif masyarakat lemah marginal." },
+          { key: "E", text: "Keajegan stratifikasi hierarkis yang mengutamakan kendaraan pejabat negara yang mewah." }
+        ],
+        correct: "B",
+        explanation: "Berhenti tanpa disuruh/diawasi adalah budaya yang mendarah daging (Tahap Pola), dan merupakan wujud nyata syarat internal (Kesadaran kuat akan norma relevan demi keselamatan)."
+      }
+    ];
+
+    // --- STATE VARIABLES ---
+    let currentQIndex = 0;
+    let score = 0;
+    let selectedAnswer = null;
+    let isAnswered = false;
+
+    // --- DOM ELEMENTS ---
+    const screens = {
+      start: document.getElementById('screen-start'),
+      quiz: document.getElementById('screen-quiz'),
+      result: document.getElementById('screen-result')
+    };
+
+    // Quiz Elements
+    const elCategory = document.getElementById('quiz-category');
+    const elProgressText = document.getElementById('quiz-progress-text');
+    const elProgressBar = document.getElementById('quiz-progress-bar');
+    const elStimulusContainer = document.getElementById('quiz-stimulus-container');
+    const elStimulus = document.getElementById('quiz-stimulus');
+    const elQuestion = document.getElementById('quiz-question');
+    const elOptions = document.getElementById('quiz-options');
+    const elFeedbackContainer = document.getElementById('quiz-feedback-container');
+    const elFeedbackBox = document.getElementById('quiz-feedback-box');
+    const elFeedbackIcon = document.getElementById('quiz-feedback-icon');
+    const elFeedbackTitle = document.getElementById('quiz-feedback-title');
+    const elFeedbackText = document.getElementById('quiz-feedback-text');
+    const elNextBtn = document.getElementById('quiz-next-btn');
+
+    // Result Elements
+    const elResultScore = document.getElementById('result-score');
+    const elResultCorrect = document.getElementById('result-correct');
+    const elResultTotal = document.getElementById('result-total');
+    const elResultMessage = document.getElementById('result-message');
+    const elResultCircle = document.getElementById('result-circle');
+
+    // --- FUNCTIONS ---
+    function showScreen(screenName) {
+      Object.values(screens).forEach(s => s.classList.add('hidden'));
+      screens[screenName].classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function startQuiz() {
+      currentQIndex = 0;
+      score = 0;
+      selectedAnswer = null;
+      isAnswered = false;
+      showScreen('quiz');
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      const q = questionsData[currentQIndex];
+      const progressPercent = ((currentQIndex + 1) / questionsData.length) * 100;
+
+      elCategory.textContent = q.category;
+      elProgressText.textContent = `Soal ${currentQIndex + 1} / ${questionsData.length}`;
+      elProgressBar.style.width = `${progressPercent}%`;
+      
+      if (q.stimulus && q.stimulus.trim() !== "") {
+        elStimulus.textContent = q.stimulus;
+        elStimulusContainer.classList.remove('hidden');
+      } else {
+        elStimulusContainer.classList.add('hidden');
+      }
+
+      elQuestion.textContent = q.question;
+      
+      elNextBtn.innerHTML = currentQIndex === questionsData.length - 1 
+        ? `Lihat Skor Akhir <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>`
+        : `Soal Berikutnya <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>`;
+
+      renderOptions();
+      elFeedbackContainer.classList.add('hidden');
+    }
+
+    function renderOptions() {
+      const q = questionsData[currentQIndex];
+      elOptions.innerHTML = '';
+
+      q.options.forEach(opt => {
+        const btn = document.createElement('button');
+        
+        let btnClass = "w-full text-left p-4 rounded-xl border border-slate-600 bg-slate-700/40 hover:bg-indigo-600/20 transition duration-200 flex items-start gap-4";
+        let letterClass = "flex-shrink-0 w-8 h-8 rounded-full bg-slate-600 text-white flex items-center justify-center font-bold text-sm mt-1 md:mt-0";
+        let textClass = "text-slate-200 md:pt-1";
+        
+        if (!isAnswered) {
+          btn.style.cursor = "pointer";
+          btn.onclick = () => selectOption(opt.key);
+        } else {
+          btn.disabled = true;
+          btnClass = "w-full text-left p-4 rounded-xl border flex items-start gap-4 opacity-60";
+          
+          if (opt.key === q.correct) {
+            btnClass = "w-full text-left p-4 rounded-xl border border-emerald-500 bg-emerald-900/40 flex items-start gap-4";
+            letterClass = "flex-shrink-0 w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-sm mt-1 md:mt-0";
+          } else if (opt.key === selectedAnswer && selectedAnswer !== q.correct) {
+            btnClass = "w-full text-left p-4 rounded-xl border border-rose-500 bg-rose-900/40 flex items-start gap-4";
+            letterClass = "flex-shrink-0 w-8 h-8 rounded-full bg-rose-500 text-white flex items-center justify-center font-bold text-sm mt-1 md:mt-0";
+          }
+        }
+
+        btn.className = btnClass;
+        btn.innerHTML = `
+          <span class="${letterClass}">${opt.key}</span>
+          <span class="${textClass}">${opt.text}</span>
+        `;
+        elOptions.appendChild(btn);
+      });
+    }
+
+    function selectOption(key) {
+      if (isAnswered) return;
+      isAnswered = true;
+      selectedAnswer = key;
+
+      const q = questionsData[currentQIndex];
+      const isCorrect = (key === q.correct);
+
+      if (isCorrect) score++;
+
+      renderOptions(); 
+      showFeedback(isCorrect, q.explanation);
+    }
+
+    function showFeedback(isCorrect, explanation) {
+      elFeedbackContainer.classList.remove('hidden');
+      
+      if (isCorrect) {
+        elFeedbackBox.className = "p-6 rounded-2xl border bg-emerald-900/30 border-emerald-500/50 text-emerald-100 mb-6";
+        elFeedbackIcon.innerHTML = `<svg class="w-7 h-7 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+        elFeedbackTitle.textContent = "Jawaban Kamu Tepat!";
+      } else {
+        elFeedbackBox.className = "p-6 rounded-2xl border bg-rose-900/30 border-rose-500/50 text-rose-100 mb-6";
+        elFeedbackIcon.innerHTML = `<svg class="w-7 h-7 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+        elFeedbackTitle.textContent = "Jawaban Kamu Kurang Tepat";
+      }
+
+      elFeedbackText.innerHTML = `<strong class="font-semibold text-white">Pembahasan:</strong><br/>${explanation}`;
+      
+      // Auto-scroll to feedback on mobile
+      setTimeout(() => {
+        elFeedbackContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 100);
+    }
+
+    function handleNextQuestion() {
+      if (currentQIndex < questionsData.length - 1) {
+        currentQIndex++;
+        selectedAnswer = null;
+        isAnswered = false;
+        renderQuestion();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        showResultScreen();
+      }
+    }
+
+    function showResultScreen() {
+      const total = questionsData.length;
+      const finalScore = Math.round((score / total) * 100);
+      
+      elResultScore.textContent = finalScore;
+      elResultCorrect.textContent = score;
+      elResultTotal.textContent = total;
+      
+      elResultCircle.setAttribute('stroke-dasharray', `${finalScore}, 100`);
+
+      if (finalScore >= 80) {
+        elResultMessage.textContent = "Luar biasa! Penguasaan materi sosiologimu sangat mantap.";
+      } else if (finalScore >= 60) {
+        elResultMessage.textContent = "Kerja bagus! Sedikit lagi kamu akan sangat menguasai materi ini.";
+      } else {
+        elResultMessage.textContent = "Terus semangat belajar! Yuk pelajari lagi teori-teori sosiologinya.";
+      }
+
+      showScreen('result');
+    }
+
+    function goHome() {
+      showScreen('start');
+    }
+  </script>
+</body>
+</html>
